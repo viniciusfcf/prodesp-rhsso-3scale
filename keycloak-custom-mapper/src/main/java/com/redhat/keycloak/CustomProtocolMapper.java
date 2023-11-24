@@ -2,6 +2,9 @@ package com.redhat.keycloak;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.core.MultivaluedMap;
+
+import org.jboss.resteasy.spi.HttpRequest;
 import org.keycloak.models.ClientSessionContext;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.ProtocolMapperModel;
@@ -13,9 +16,6 @@ import org.keycloak.protocol.oidc.mappers.OIDCIDTokenMapper;
 import org.keycloak.protocol.oidc.mappers.UserInfoTokenMapper;
 import org.keycloak.provider.ProviderConfigProperty;
 import org.keycloak.representations.AccessToken;
-
-import jakarta.ws.rs.core.MultivaluedMap;
-
 
 public class CustomProtocolMapper extends AbstractOIDCProtocolMapper implements OIDCAccessTokenMapper,
   OIDCIDTokenMapper, UserInfoTokenMapper {
@@ -67,7 +67,8 @@ public class CustomProtocolMapper extends AbstractOIDCProtocolMapper implements 
             KeycloakSession session, UserSessionModel userSession, ClientSessionContext clientSessionCtx) {
         // System.out.println("#### RequestHeaders=" + session.getContext().getHttpRequest().getHttpHeaders().getRequestHeaders());
         // System.out.println("#### DecodedFormParameters=" + session.getContext().getHttpRequest().getDecodedFormParameters());
-        MultivaluedMap<String, String> parameters = session.getContext().getHttpRequest().getDecodedFormParameters();
+        HttpRequest request = session.getContext().getContextObject(HttpRequest.class);
+        MultivaluedMap<String, String> parameters = request.getDecodedFormParameters();
         token.getOtherClaims().put("owner", parameters.get("owner"));
         token.getOtherClaims().put("groups", new ArrayList<>());
         parameters.keySet().stream().filter(p -> p.startsWith("groups")).forEach(k -> {
