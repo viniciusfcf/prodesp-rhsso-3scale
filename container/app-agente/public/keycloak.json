@@ -1,0 +1,7 @@
+{
+  "realm": "master",
+  "auth-server-url": "http://kc2:8082",
+  "ssl-required": "external",
+  "resource": "agente",
+  "public-client": true
+}

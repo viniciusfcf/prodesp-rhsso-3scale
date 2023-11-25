@@ -1,0 +1,7 @@
+{
+  "realm": "master",
+  "auth-server-url": "http://kc1:8081",
+  "ssl-required": "external",
+  "resource": "cidadao",
+  "public-client": true
+}
